@@ -41,6 +41,7 @@
                     @if(!request()->is('admin/*'))
                     <ul class="navbar-nav me-auto">
                         <form action="{{ route('search') }}"  style="width: 300px;">
+                        @csrf
                             <input type="search" name="search" id="search" class="form-control form-control-sm" placeholder="Search...">
                         </form>
                     </ul>
