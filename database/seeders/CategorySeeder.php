@@ -55,7 +55,7 @@ class CategorySeeder extends Seeder
                     'name' => 'Games',
                     'created_at' => NOW( ),
                     'updated_at' => NOW( )
-                ],
+                ]
 
             ];
             foreach($categories as $categorydata){
