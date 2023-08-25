@@ -18,19 +18,37 @@ class ProfileController extends Controller
 
     public function show($id){
                 $user = $this->user->findOrFail($id);
-
-                return view('users.profile.show')->with('user', $user);
+                $loginUser = Auth::user();
+                
+                $loginUserFollowers = $loginUser->followers;
+                $userFollowers = $user->followers;
+                $commonFollowers = $loginUser->followers->intersect($user->followers);
+                return view('users.profile.show')
+                    ->with('user', $user)
+                    ->with('commonFollowers', $commonFollowers);
     }
 
     public function showFollower($id){
         $user = $this->user->findOrFail($id);
-      
-        return view('users.profile.follower')->with('user', $user);
+        $loginUser = Auth::user();
+        $loginUserFollowers = $loginUser->followers;
+                $userFollowers = $user->followers;
+                $commonFollowers = $loginUser->followers->intersect($user->followers);
+
+        return view('users.profile.follower')->with('user', $user)->with('commonFollowers', $commonFollowers);
     }
 
     public function showFollowing($id){
         $user = $this->user->findOrFail($id);
-        return view('users.profile.following')->with('user', $user);
+        $loginUser = Auth::user();
+        $loginUserFollowers = $loginUser->followers;
+        $userFollowers = $user->following;
+        $commonFollowers = $loginUser->following->intersect($user->followers);
+
+        return view('users.profile.following')
+            ->with('user', $user)
+            ->with('commonFollowers', $commonFollowers)
+            ->with('loginUserFollowers', $loginUserFollowers);
     }
 
 
@@ -41,8 +59,8 @@ class ProfileController extends Controller
 
 public function update(Request $request){
         $request->validate([
-                'name' =>'required|min:1|max:50',
-                'email' =>'required|email|max:50|unique:users',
+                'name' =>'min:1|max:50',
+                'email' =>'email|max:50|unique:users',
                 'avatar' =>'mimes:jpg,jpeg,gif,png|max:1048',
                 'introduction' => 'max:100'
         ]);

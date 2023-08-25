@@ -40,35 +40,36 @@
                 </div>
        </div>
         {{-- Suggestions --}}
-        <div class="row">
-        <div class="row">
-            <div class="col-auto">
-                <p class="h5 fw-bold text-muted">Suggestions</p>
+        
+            <div class="row">
+                <div class="col-auto">
+                    <p class="h5 fw-bold text-muted">Suggestions</p>
+                </div>
+                <div class="col text-end">
+                    <a href="{{ route('suggestedUsers' )}}" class="fw-bold text-decoration-none text-dark">See all</a>
+                </div>
             </div>
-            <div class="col text-end">
-                <a href="#" class="fw-bold text-decoration-none text-dark">See all</a>
+             @foreach( $suggested_users as $suggested_user )
+            <div class="row align-items-center mt-3">
+                <div class="col">
+                    @if($suggested_user->avatar)
+                        <img src="{{$suggested_user->avatar}}" alt="{{$suggested_user->name}}" class="rounded-circle avatar-sm">
+                    @else
+                        <i class="fa-solid fa-circle-user text-secondary  icon-sm "></i>
+                    @endif
+                </div>
+                <div class="col me-5 ps-0 text-truncate">
+                    <a href="{{ route('profile.show', $suggested_user->id )}}" class="text-decoration-none text-dark fw-bold">{{$suggested_user->name}} 
+                    </a>       
+                </div>
+                <div class="col ps-5 text-end">
+                    <form action="{{ route('follow.store', $suggested_user->id)}}" method="post">
+                        @csrf
+                        <button type="submit" class="border-0 bg-transparent p-0 text-primary">Follow</button>
+                    </form>
+                </div>
             </div>
-        </div>
-                @foreach( $suggested_users as $suggested_user )
-                    <div class="row align-items-center mt-3">
-                        <div class="col">
-                                @if($suggested_user->avatar)
-                                <img src="{{$suggested_user->avatar}}" alt="{{$suggested_user->name}}" class="rounded-circle avatar-sm">
-                                @else
-                                <i class="fa-solid fa-circle-user text-secondary  icon-sm "></i>
-                            @endif
-                        </div>
-                        <div class="col me-5 ps-0 text-truncate">{{$suggested_user->name}}        
-                        </div>
-                        <div class="col ps-5 text-end">
-                            <form action="{{ route('follow.store', $suggested_user->id)}}" method="post">
-                                    @csrf
-                                <button type="submit" class="border-0 bg-transparent p-0 text-primary">Follow</button>
-                            </form>
-                        </div>
-                    </div>
 ​          @endforeach
-
     </div>
 </div>
 @endsection

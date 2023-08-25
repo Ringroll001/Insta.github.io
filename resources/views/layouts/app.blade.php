@@ -63,6 +63,10 @@
                                 </li>
                             @endif
                         @else
+                        {{---DM--}}
+                        <li class="nav-item" title="Home">
+                                <a href="{{ route('index')}}" class="nav-link"><i class="fa-regular fa-comment text-dark  icon-sm"></i></a>
+                        </li>
                         {{---home --}}
                         <li class="nav-item" title="Home">
                                 <a href="{{ route('index')}}" class="nav-link"><i class="fa-solid fa-house text-dark  icon-sm"></i></a>

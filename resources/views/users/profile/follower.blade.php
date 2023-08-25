@@ -11,44 +11,44 @@
                     <h3 class="text-secondary text-center">No follower yet.</h3>
                 @else       
                      <h2 class="text-secondary text-center">Followers</h2>     
-                    @foreach( $user->followers as $follower )
- 
-                                <div class="row align-items-center mt-3">
-                
-                                <div class="col-auto">
+                    <div class="row align-items-center mt-3">
+                        @foreach( $user->followers as $follower )
+                                <div class="col-4 mt-3">
+                                    @if($follower->followers->avatar)
                                     <img src="{{$follower->followers->avatar}}" alt="{{$follower->followers->name}}" class="img-thumbnail rounded-circle d-block mx-auto avatar-md">
+                                    @else
+                                    <i class="fa-solid fa-circle-user text-secondary icon-md d-block mx-auto"></i>
+                                 @endif      
                                 </div>
-                                <div class="col-auto me-5 ps-0 text-truncate">{{$follower->followers->name}}
+
+                                <div class="col-6 text-truncate">
+                                <a href="{{ route('profile.show', $follower->followers->id )}}" class="text-decoration-none text-dark fw-bold"> {{$follower->followers->name}}</a> 
                                 </div>
-                                <div class="col-auto ps-5 text-end">
+                                
                                     @if ( $follower->followers->id != Auth::user( )->id )
                                         @if($follower->followers->isFollowed( ) )
-
-                                        <div class="col">
+                                        <div class="col-2">
                                             <form action="{{ route('follow.destroy', $follower->followers->id )}}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-outline-secondary">Following</button>
+                                                </form>
                                         </div>  
-                                        </form>
-                                        @else
-                                    <form action="{{ route('follow.store', $follower->followers->id)}}" method="post">
-                                        @csrf
-                                        <button type="submit" class="border-0 bg-transparent p-0 text-primary">Follow</button>
-                                    </form>
-                                    
-                                    
-                                        @endif
-                                        @endif
-                                    
                                        
-                                    
-                            </div>               
+                                        @else
+                                        <div class="col-2">
+                                            <form action="{{ route('follow.store', $follower->followers->id)}}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn  btn-  text-primary">Follow</button>
+                                            </form>
+                                        </div>   
+                                        @endif
+                                        @endif 
+                                      
                            
                         @endforeach
-
-                @endif       
-                </div>
+                         @endif       
+                    </div>
 
             </div>
         </div>

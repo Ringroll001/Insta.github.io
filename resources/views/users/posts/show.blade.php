@@ -4,7 +4,7 @@
 
 @section('content')
 
-        <style>
+<style>
                 .col-4{
                         overflow-y: scroll;
                 }
@@ -13,69 +13,76 @@
                         position: absolute;
                         top: 65px;
                 }
-        </style>
-        <div class="row border shadow">
-                {{--first colum--}}
-                <div class="col p-0 border-end">
+</style>
+<div class="row border shadow">
+    {{--first colum--}}
+    <div class="col p-0 border-end">
                         <img src="{{ $post->image}}" alt="post id {{ $post->id}}" class="w-100">
-                </div>
-                {{---second colum--}}
-                <div class="col-4 px-0 bg-white">
-                        <div class="card border-0">
-                                <div class="card-header bg-white py">
-                                        <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                        <a href="{{ route('profile.show', $post->user->id) }}">
-                                                                @if ($post->user->avatar)
-                                                                        <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name}}" class="rounded-circle avatar-sm">
-                                                        
-                                                                @else
-                                                                        <i class="fa-solid fa-circle-user text-secondary icon-sm"></i>
-                                                                @endif
-                                                        </a>
-                                                </div>
-                                                <div class="col ps-0">
-                                                        <a href="{{ route('profile.show',$post->user->id) }}" class="text-decoration-none text-dark">{{ $post->user->name}}</a>
-                                                </div>
-                                                <div class="col-auto">
-                                                        <div class="dropdown">
-                                                                <button class="btn btn-sm shadow-none" data-bs-toggle="dropdown">
-                                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                                </button>
+     </div>
+    {{---second colum--}}
+    <div class="col-4 px-0 bg-white">
+        <div class="card border-0">
+            <div class="card-header bg-white py">
+                <div class="row align-items-center">
 
-                                                                {{--- if you are the owner of the post, you can edit or delete the post---}}
-                                                                @if (Auth::user( )->id === $post->user->id)
-                                                                        <div class="dropdown-menu">
-                                                                                <a href="{{route('post.edit', $post->id) }}" class="dropdown-item">
-                                                                                        <i class="fa-regular fa-pen-to-square"></i>Edit
-                                                                                </a>
-                                                                                <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target = "#delete-post-{{ $post->id}}"><i class="fa-regular fa-trash-can"></i>Delete</button>
-                                                                        </div>
-                                                                        {{--include modal here --}}
-                                                                        @include('users.posts.contents.modals.delete')
-                                                                @else
-                                                                        {{--if you are not the owner of the post, then show an umfollow butto --}}
-                                                                       {{---show follow button for now ---}}
-                                                                       <form action="{{ route('follow.store', $post->user->id)}}" method="post">
-                                                                        @csrf
-                                                                        <button type="submit" class="border-0 bg-transparent p-0 text-primary">Follow</button>
-                                                                       </form>
-                                                                @endif
-                                                        </div>
-                                                </div>
-                                        </div>
+                    <div class="col-auto">
+                        <a href="{{ route('profile.show', $post->user->id) }}">
+                            @if ($post->user->avatar)
+                                <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name}}" class="rounded-circle avatar-sm">
+                            @else
+                                <i class="fa-solid fa-circle-user text-secondary icon-sm"></i>
+                            @endif
+                        </a>
+                    </div>
+
+                    <div class="col ps-0">
+                        <a href="{{ route('profile.show',$post->user->id) }}" class="text-decoration-none text-dark">{{ $post->user->name}}</a>
+                    </div>
+
+                    <div class="col-auto">
+                        <div class="dropdown">
+                            <button class="btn btn-sm shadow-none" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-ellipsis"></i>
+                            </button>
+                                {{--- if you are the owner of the post, you can edit or delete the post---}}
+
+                            @if (Auth::user( )->id === $post->user->id)
+                                <div class="dropdown-menu">
+                                        <a href="{{route('post.edit', $post->id) }}" class="dropdown-item">
+                                            <i class="fa-regular fa-pen-to-square"></i>Edit
+                                        </a>
+                                        <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target = "#delete-post-{{ $post->id}}">
+                                            <i class="fa-regular fa-trash-can"></i>Delete
+                                        </button>
                                 </div>
-                                <div class="card-body w-100">
-                                {{--header button + no of likes + categories--}}
-                                        <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                @if($post->isLiked( ))
-                                                        <form action="{{ route('like.destroy', $post->id) }}" method="post">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-sm p-0">
-                                                                        <i class="fa-solid fa-heart text-danger"></i>
-                                                                </button>
+
+                                {{--include modal here --}}
+                                @include('users.posts.contents.modals.delete')
+                            @else
+                                {{--if you are not the owner of the post, then show an umfollow butto --}}
+                                {{---show follow button for now ---}}
+                                <form action="{{ route('follow.store', $post->user->id)}}" method="post">
+                                    @csrf
+                                    <button type="submit" class="border-0 bg-transparent p-0 text-primary">Follow</button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-body w-100">
+                 {{--header button + no of likes + categories--}}
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            @if($post->isLiked( ))
+                                <form action="{{ route('like.destroy', $post->id) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm p-0">
+                                        <i class="fa-solid fa-heart text-danger"></i>
+                                    </button>
                                                         </form>
                                                         @else
                                                 <form action="{{ route('like.store',$post->id) }}" method="post">
@@ -87,7 +94,7 @@
                                                  @endif
                                                 
                                                 </div>
-                                                <div class="col-auto px-0 pb-3">
+                                                <div class="col-auto px-0 ">
                                                         <span>{{ $post->likes->count( ) }}</span>
                                                 </div>
                                                 <div class="col text-end">
@@ -99,8 +106,24 @@
                                                         @empty
                                                         <span class="badge badge-dark bg-dark">Uncategorized</span>
                                                         @endforelse
-                                         
                                                 </div>
+                                        </div>
+                                        <div class="col">
+                                            @if(  $post->likes->count( ) == 0 )
+                                            <p></p>
+                                            @elseif($post->likes->count( ) == 1 )
+                                            <p>Liked by
+                                            @foreach ($post->likes as $like)
+                                            <a href="{{ route('profile.show', $like->user->id )}}" class="text-decoration-none text-dark fw-bold"> {{ $like->user->name }}</a>               
+                                            @endforeach
+                                            </p>
+                                            @else
+                                            @foreach ($post->likes->take(1) as $like)
+                                            <p>Liked by
+                                                    <a href="{{ route('profile.show', $like->user->id )}}" class="text-decoration-none text-dark fw-bold"> {{ $like->user->name }}</a>  and <a href="{{ route ('showLikedUser', $post->id) }}" class="text-decoration-none text-dark fw-bold">others</a>
+                                            </p>               
+                                                @endforeach  
+                                        @endif 
                                         </div>
                                         {{----owner + description----}}
                                         <a href="{{ route('profile.show',$post->user->id) }}" class="text-decoration-none text-dark fw-bold">{{ $post->user->name}}</a>

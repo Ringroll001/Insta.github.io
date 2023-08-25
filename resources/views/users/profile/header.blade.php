@@ -34,27 +34,36 @@
                 </div>
                 <div class="row mb-3">
                         <div class="col-auto">
+                        <a href="{{ route ('profile.show', $user->id) }}" class="text-decoration-none text-dark">
                         @if( $user->posts->count( ) <= 1 )
-                                <a href="#" class="text-decoration-none text-dark"></a>
-                                <strong>{{ $user->posts->count( )}}</strong>post
+                                
+                                <strong class="me-2">{{ $user->posts->count( )}}</strong>post</a>
                                 @else
-                                <strong>{{ $user->posts->count( )}}</strong>posts
+                                <strong class="me-2">{{ $user->posts->count( )}}</strong>posts</a>
                                 @endif
                         </div>
                        
                         <div class="col-auto">
                                 <a href="{{ route ('profile.showFollower', $user->id) }}" class="text-decoration-none text-dark">
                                 @if( $user->followers->count( ) <= 1 )    
-                                <strong>{{ $user->followers->count( ) }}</strong>follower</a>
+                                <strong class="me-2">{{ $user->followers->count( ) }}</strong>follower</a>
                                 @else
-                                <strong>{{ $user->followers->count( ) }}</strong>followers</a>
+                                <strong class="me-2">{{ $user->followers->count( ) }}</strong>followers</a>
                                 @endif
                         </div>
                         <div class="col-auto">
                                 <a href="{{ route ('profile.showFollowing', $user->id) }}" class="text-decoration-none text-dark">
-                                <strong>{{ $user->following->count( ) }}</strong>following</a>
+                                <strong class="me-2">{{ $user->following->count( ) }}</strong>following</a>
                         </div>  
                 <p class="fw-bold">{{$user->introduction}}</p>
+                <p>Followed by
+                @foreach( $commonFollowers as $commonFollower) 
+                    
+                  {{ $commonFollower->id }}
+                
+                @endforeach
+                
+                </p>
                 </div>
         </div>
 </div>

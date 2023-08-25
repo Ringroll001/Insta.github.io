@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Like;
 
 class HomeController extends Controller
 {
@@ -19,10 +20,11 @@ class HomeController extends Controller
 
      private $user;
 
-    public function __construct(Post $post, User $user)
+    public function __construct(Post $post, User $user, Like $like)
     {
       $this->post = $post;  
       $this->user = $user;
+      $this->like = $like;
     }
 
     /**
@@ -34,11 +36,16 @@ class HomeController extends Controller
     {
         $home_posts = $this->getHomePosts( );
         $suggested_users = $this->getSuggestionUsers( );
-
+        $user = Auth::user();
+        $like = $this->like->get( );
+        
+        
+       
         return view('users.home')
             ->with('home_posts', $home_posts)
-            ->with('suggested_users', $suggested_users);
-        
+            ->with('suggested_users', $suggested_users)
+            ->with('like',$like)
+            ->with('user',$user);
     }
 
     //get the posts of the users that the auth user is following 
@@ -74,6 +81,32 @@ class HomeController extends Controller
             $users = $this->user->where('name', 'like', '%' . $request->search.'%')->get( );
             return view('users.search')->with('users', $users)->with('search', $request->search);
         }
+
+        public function showLikedUser($post_id){
+            $post = $this->post->findOrFail($post_id);
+            $likedUsers = $post->likes->pluck('user');
+            $user = Auth::user();
+            $like = $this->like->get( );
+            return view('users.posts.contents.liked')
+                ->with('post', $post)
+                ->with('likedUsers', $likedUsers)
+                ->with('user', $user)
+                ->with('like',$like);
+        }
+
+        public function suggestedUsers( ){
+
+        $home_posts = $this->getHomePosts( );
+        $suggested_users = $this->getSuggestionUsers( );
+        $user = Auth::user();
+        $like = $this->like->get( );
+            return view('users.seeall')
+            ->with('home_posts', $home_posts)
+            ->with('suggested_users', $suggested_users)
+            ->with('like',$like)
+            ->with('user',$user);;
+        }
+
     }
     
 
